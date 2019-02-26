@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import Col from "react-bootstrap/Col";
+import "./components.css";
+import Pool from "./pool";
+import Graph from "./graph";
 
-import "./graph.css";
-import ReactChartkick, { ColumnChart } from "react-chartkick";
-import Chart from "chart.js";
-ReactChartkick.addAdapter(Chart);
-
-class PoolOptions extends Component {
+class PoolCreator extends Component {
   constructor() {
     super();
     this.state = {
@@ -16,88 +14,87 @@ class PoolOptions extends Component {
       inputLength: 0,
       selectedOption: "",
       votes: [],
-      data: [["Sun", 32], ["Mon", 46], ["Tue", 28]]
+      votesCount: 0
     };
   }
 
-  //Update states according to inputs
+  //Update question according to input
   handleInputChange = e => {
     e.preventDefault();
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
 
-  //Add answers
+  //Update answers according to input
   handleAnswerNameChange = idx => evt => {
     const newAnswers = this.state.answers.map((answer, sidx) => {
       if (idx !== sidx) return answer;
-      return { ...answer, oneAnswer: evt.target.value, count: 0 };
+      return {
+        ...answer,
+        oneAnswer: evt.target.value,
+        count: answer.count === undefined ? 0 : answer.count
+      };
     });
 
     this.setState({
+      answersCount: evt.target.value.length === 0 ? idx : idx + 1,
       answers: newAnswers,
-      inputLength: evt.target.value.length
+      inputLength: evt.target.value.length,
+      votes: newAnswers.map(answer => [answer.oneAnswer, answer.count])
     });
   };
 
   //Add 1 to answers count when button is clicked, post answer and reset input value
   addAnswer = e => {
     e.preventDefault();
-    const newCount = this.state.answersCount + 1;
+
     this.setState({
-      answersCount: newCount,
       answers: this.state.answers.concat([{ oneAnswer: "" }]),
       inputLength: 0
     });
   };
 
-  //Remove answers
+  //Remove one answer row
   removeAnswer = idx => () => {
-    const newCount = this.state.answersCount - 1;
+    const newCount =
+      this.state.inputLength === 0
+        ? this.state.answersCount
+        : this.state.answersCount - 1;
     this.setState({
       answersCount: newCount,
       answers: this.state.answers.filter((s, sidx) => idx !== sidx),
+      votes: this.state.votes.filter((s, sidx) => idx !== sidx),
       inputLength: 1
     });
   };
 
-  //Update selected option
+  //Get selected answer
   handleOptionChange = changeEvent => {
     this.setState({
       selectedOption: changeEvent.target.value
     });
-    console.log("lagging");
-    console.log(this.state.selectedOption);
   };
 
-  //Count votes
+  //Compute vote
   handleVote = evt => {
     evt.preventDefault();
     let votesArray = this.state.votes;
 
-    if (votesArray.length === 0) {
-      this.setState({
-        votes: [[this.state.selectedOption, 1]]
-      });
-    } else if (votesArray.length === 1) {
-      if (votesArray[0] === this.state.selectedOption) {
-        this.setState({
-          votes: [[votesArray[0], votesArray[1] + 1]]
-        });
-      }
-    } else {
-      votesArray.forEach(answer => {
-        if (answer[0] === this.state.selectedOption) {
-          let count = answer[1];
-          this.setState({
-            votes: [...answer, [answer[0], parseInt(count) + 1]]
-          });
-        }
-      });
-    }
+    this.setState({
+      answers: this.state.answers.map(answer => {
+        return answer.oneAnswer === this.state.selectedOption
+          ? { oneAnswer: answer.oneAnswer, count: answer.count + 1 }
+          : answer;
+      }),
+      votes: votesArray.map(answer => {
+        return answer[0] === this.state.selectedOption
+          ? [answer[0], answer[1] + 1]
+          : [answer[0], answer[1]];
+      })
+    });
   };
 
-  //Clear all data
+  //Clear all inputed data
   reset = () => {
     this.setState({
       question: "",
@@ -113,105 +110,78 @@ class PoolOptions extends Component {
     return (
       <React.Fragment>
         <Col lg={4} md={4} sm={6} xs={12}>
-          <h1>This is where the pool is created</h1>
-          <p>Please insert a question and up to 10 possible answers:</p>
-          <form>
-            <input
-              className="input-sm m-3"
-              type="text"
-              name="question"
-              maxLength="80"
-              placeholder="Type a question"
-              value={this.state.question}
-              onChange={e => this.handleInputChange(e)}
-            />
-
-            {this.state.answers.map((answer, idx) => (
-              <div
-                key={idx}
-                //change style below to css file
-                style={{ display: "flex", justifyContent: "center" }}
-                className="input-group"
-              >
+          <div>
+            <div className="block-height">
+              <h2 className="m-4">Create your pool</h2>
+              <p>Please insert a question and up to 10 possible answers:</p>
+              <form>
                 <input
-                  className="input-sm m-1"
+                  className="input-sm m-3"
                   type="text"
-                  name="inputLength"
+                  name="question"
                   maxLength="80"
-                  placeholder="Type an answer"
-                  value={answer.oneAnswer}
-                  onChange={this.handleAnswerNameChange(idx)}
+                  placeholder="Type a question"
+                  value={this.state.question}
+                  onChange={e => this.handleInputChange(e)}
                 />
+                {this.state.answers.map((answer, idx) => (
+                  <div key={idx} className="input-group inline-items-centered">
+                    <input
+                      className="input-sm m-1"
+                      type="text"
+                      name="inputLength"
+                      maxLength="80"
+                      placeholder="Type an answer"
+                      disabled={this.state.question.length === 0}
+                      value={answer.oneAnswer}
+                      onChange={this.handleAnswerNameChange(idx)}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-sm m-1 btn-secondary"
+                      disabled={this.state.answers.length === 1}
+                      onClick={this.removeAnswer(idx)}
+                    >
+                      -
+                    </button>
+                  </div>
+                ))}
                 <button
                   type="button"
-                  className="btn btn-sm m-1 btn-secondary"
-                  disabled={this.state.answers.length === 1}
-                  onClick={this.removeAnswer(idx)}
+                  className="btn btn-sm m-1 btn-success"
+                  onClick={this.addAnswer}
+                  disabled={this.state.inputLength === 0}
+                  hidden={this.state.answersCount === 10}
                 >
-                  -
+                  Add Answer
                 </button>
-              </div>
-            ))}
-
-            <button
-              type="button"
-              className={this.getButtonClasses()}
-              onClick={this.addAnswer}
-              disabled={this.state.inputLength === 0}
-              hidden={this.state.answersCount === 9}
-            >
-              Add Answer
-            </button>
-          </form>
-          <button type="button" onClick={this.reset}>
-            Reset
-          </button>
-        </Col>
-        <Col lg={4} md={4} sm={6} xs={12}>
-          <h1>I'm the pool</h1>
-          <p>{this.state.question}</p>
-          <form onSubmit={this.handleVote}>
-            {this.state.answers.map((answer, idx) =>
-              answer.oneAnswer ? (
-                <label className="container">
-                  <input
-                    type="radio"
-                    name="radio"
-                    value={answer.oneAnswer}
-                    className="m-2"
-                    onChange={this.handleOptionChange}
-                  />
-                  {answer.oneAnswer}
-                </label>
-              ) : (
-                ""
-              )
-            )}
-            <input type="submit" value="Vote" />
-          </form>
-        </Col>
-        <Col lg={4} md={4} sm={12} xs={12}>
-          <h1>I'm the graph</h1>
-          <div className="graph-wrapper">
-            <div className="graph">
-              <ColumnChart
-                data={this.state.votes}
-                colors={["#b00", "#666"]}
-                label="Votes"
-              />
+              </form>
+            </div>
+            <div className="inline-items-align">
+              <p>{this.state.answersCount} / 10 possible answers</p>
+              <button
+                type="button"
+                onClick={this.reset}
+                className="btn btn-sm m-1 btn-danger"
+              >
+                Reset
+              </button>
             </div>
           </div>
         </Col>
+
+        <Pool
+          question={this.state.question}
+          answers={this.state.answers}
+          inputLength={this.state.inputLength}
+          handleVote={this.handleVote}
+          handleOptionChange={this.handleOptionChange}
+        />
+
+        <Graph data={this.state.votes} />
       </React.Fragment>
     );
   }
-
-  //Automatically change the color of add button when ansers count reaches 10
-  getButtonClasses() {
-    let classes = "btn btn-sm m-1 btn-";
-    classes += this.state.answersCount === 9 ? "danger" : "success";
-    return classes;
-  }
 }
 
-export default PoolOptions;
+export default PoolCreator;

@@ -1,0 +1,60 @@
+body {
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.graph {
+  position: relative;
+  max-width: 100%;
+  min-width: 100%;
+  background: white;
+}
+
+.block-height {
+  height: 100%;
+  min-height: 448px;
+}
+
+.inline-items-align {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 10px auto;
+}
+
+.inline-items-centered {
+  display: flex;
+  justify-content: center;
+}
+
+p {
+  margin-top: auto !important;
+  margin-bottom: auto !important;
+}
+
+.question {
+  font-size: 1.5em;
+  color: navy;
+  font-style: italic;
+}
+
+.set-height {
+  min-height: 448px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: flex-start;
+}
+
+.set-bottom {
+  display: block;
+  float: right;
+}
+
+.center-column-height {
+  min-height: 448px;
+}
+
+.column-borders {
+  column-rule-style: solid;
+}
