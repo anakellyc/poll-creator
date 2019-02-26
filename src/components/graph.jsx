@@ -23,7 +23,7 @@ class Graph extends Component {
               </div>
             </div>
           </div>
-          <p>
+          <p className="inline-items-align">
             Total votes:{" "}
             {this.props.data
               .map(el => parseInt(el[1]))

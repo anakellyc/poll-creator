@@ -19,9 +19,9 @@ class PoolCreator extends Component {
   }
 
   //Update question according to input
-  handleInputChange = e => {
-    e.preventDefault();
-    const { name, value } = e.target;
+  handleInputChange = evt => {
+    evt.preventDefault();
+    const { name, value } = evt.target;
     this.setState({ [name]: value });
   };
 
@@ -55,7 +55,7 @@ class PoolCreator extends Component {
   };
 
   //Remove one answer row
-  removeAnswer = idx => () => {
+  removeAnswer = idx => e => {
     const newCount =
       this.state.inputLength === 0
         ? this.state.answersCount
@@ -69,9 +69,9 @@ class PoolCreator extends Component {
   };
 
   //Get selected answer
-  handleOptionChange = changeEvent => {
+  handleOptionChange = evt => {
     this.setState({
-      selectedOption: changeEvent.target.value
+      selectedOption: evt.target.value
     });
   };
 
@@ -148,7 +148,7 @@ class PoolCreator extends Component {
                 ))}
                 <button
                   type="button"
-                  className="btn btn-sm m-1 btn-success"
+                  className="btn btn-sm m-1 btn-primary"
                   onClick={this.addAnswer}
                   disabled={this.state.inputLength === 0}
                   hidden={this.state.answersCount === 10}

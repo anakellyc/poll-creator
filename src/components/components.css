@@ -1,12 +1,14 @@
 body {
   font-family: "Comic Sans MS", cursive, sans-serif;
+  background-color: rgb(216, 234, 238);
+  color: rgb(44, 44, 44);
 }
 
 .graph {
   position: relative;
   max-width: 100%;
   min-width: 100%;
-  background: white;
+  background: rgb(218, 230, 233);
 }
 
 .block-height {
@@ -33,7 +35,7 @@ p {
 
 .question {
   font-size: 1.5em;
-  color: navy;
+  color: #007bff;
   font-style: italic;
 }
 

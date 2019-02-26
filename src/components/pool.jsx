@@ -12,7 +12,13 @@ class Pool extends Component {
     } = this.props;
     return (
       <React.Fragment>
-        <Col lg={4} md={4} sm={6} xs={12}>
+        <Col
+          lg={4}
+          md={4}
+          sm={6}
+          xs={12}
+          className="border-right border-left border-dark"
+        >
           <div>
             <form className="m-4 " onSubmit={handleVote}>
               <div className="center-column-height">
@@ -39,7 +45,7 @@ class Pool extends Component {
                 <input
                   type="submit"
                   value="Vote"
-                  className="btn btn-sm m-1 btn-primary"
+                  className="btn btn-sm m-1 btn-success"
                   disabled={answers.length === 1 && inputLength === 0}
                 />
               </div>
