@@ -1,6 +1,6 @@
-POOL CREATOR
+POLL CREATOR
 
-This app allows you to easily create pools that dinamically update on input change.
+This app allows you to easily create polls that dinamically update on input change.
 
 TECH/FRAMEWORKS USED
 

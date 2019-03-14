@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import "./App.css";
 import "./components/components.css";
-import PoolCreator from "./components/poolCreator";
+import PollCreator from "./components/pollCreator";
 import NavBar from "./components/navbar";
 
 class App extends Component {
@@ -14,7 +14,7 @@ class App extends Component {
         <NavBar />
         <Container>
           <Row>
-            <PoolCreator className="margin-sides" />
+            <PollCreator className="margin-sides" />
           </Row>
         </Container>
       </div>

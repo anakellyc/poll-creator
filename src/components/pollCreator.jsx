@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import Col from "react-bootstrap/Col";
 import "./components.css";
-import Pool from "./pool";
+import Poll from "./poll";
 import Graph from "./graph";
 
-class PoolCreator extends Component {
+class PollCreator extends Component {
   constructor() {
     super();
     this.state = {
@@ -112,7 +112,7 @@ class PoolCreator extends Component {
         <Col lg={4} md={4} sm={6} xs={12}>
           <div>
             <div className="block-height">
-              <h2 className="m-4">Create your pool</h2>
+              <h2 className="m-4">Create your poll</h2>
               <p>Please insert a question and up to 10 possible answers:</p>
               <form>
                 <input
@@ -170,7 +170,7 @@ class PoolCreator extends Component {
           </div>
         </Col>
 
-        <Pool
+        <Poll
           question={this.state.question}
           answers={this.state.answers}
           inputLength={this.state.inputLength}
@@ -184,4 +184,4 @@ class PoolCreator extends Component {
   }
 }
 
-export default PoolCreator;
+export default PollCreator;

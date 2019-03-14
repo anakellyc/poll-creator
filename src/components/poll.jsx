@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Col from "react-bootstrap/Col";
 
-class Pool extends Component {
+class Poll extends Component {
   render() {
     const {
       question,
@@ -57,4 +57,4 @@ class Pool extends Component {
   }
 }
 
-export default Pool;
+export default Poll;
